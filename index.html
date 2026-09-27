@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#8b5cf6">
+<title>Action ou Vérité 💜</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(135deg,#f5e8ff,#e9e7ff);color:#242038;min-height:100vh}
+main{max-width:650px;margin:auto;padding:28px 18px 40px}
+h1{text-align:center;font-size:2.2rem;margin:10px 0 6px}
+.sub{text-align:center;color:#6f6882;margin:0 0 24px}
+.card{background:#fff;border-radius:28px;padding:24px;box-shadow:0 12px 35px rgba(75,55,120,.14)}
+.result{min-height:150px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:1.35rem;font-weight:700;padding:18px}
+.type{display:inline-block;font-size:.85rem;padding:7px 12px;border-radius:999px;background:#eee9ff;color:#7048d8;margin-bottom:10px}
+.buttons{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+button{border:0;border-radius:16px;padding:15px 12px;font-size:1rem;font-weight:700;cursor:pointer;min-height:52px;background:#eee9ff;color:#50329a}
+button.primary{background:#7048d8;color:white;grid-column:1/-1}
+button:active{transform:scale(.98)}
+.note{text-align:center;color:#777085;font-size:.82rem;margin-top:18px}
+@media(max-width:380px){h1{font-size:1.9rem}.result{font-size:1.2rem}}
+</style>
+</head>
+<body>
+<main>
+<h1>🎲 Action ou Vérité</h1>
+<p class="sub">Choisissez votre défi et amusez-vous 💜</p>
+<section class="card">
+<div class="result" id="result" aria-live="polite">Appuie sur un bouton pour commencer !</div>
+<div class="buttons">
+<button id="action">🎭 Action</button>
+<button id="verite">👀 Vérité</button>
+<button class="primary" id="random">🎲 Au hasard</button>
+</div>
+<p class="note">Vous pouvez toujours passer un défi si vous n'êtes pas à l'aise.</p>
+</section>
+</main>
+<script>
+const actions = [
+"Faire une imitation d’une personne du groupe.",
+"Chanter le refrain d’une chanson comme à l’opéra.",
+"Parler avec un accent pendant 2 minutes.",
+"Faire une danse improvisée pendant 20 secondes.",
+"Faire une pose de mannequin complètement ridicule.",
+"Faire rire quelqu’un sans parler.",
+"Imiter un animal choisi par le groupe.",
+"Faire une déclaration d’amour dramatique à une chaise.",
+"Marcher comme un robot pendant 1 minute.",
+"Inventer une mini-pub pour une bouteille d’eau.",
+"Faire 3 compliments différents à quelqu’un.",
+"Raconter une blague nulle avec beaucoup de sérieux.",
+"Faire semblant d’être présentateur météo.",
+"Imiter un professeur.",
+"Inventer une poignée de main avec la personne à côté.",
+"Faire une scène de film avec quelqu’un.",
+"Dire l’alphabet à l’envers le plus loin possible.",
+"Faire une chorégraphie sur une chanson choisie par le groupe.",
+"Dessiner quelque chose les yeux fermés.",
+"Faire deviner un film uniquement avec des mimes.",
+"Parler sans utiliser la lettre « e » pendant 30 secondes.",
+"Faire semblant de gagner un Oscar.",
+"Inventer un nouveau mot et lui donner une définition.",
+"Faire une imitation de quelqu’un qui vient de gagner au loto.",
+"Faire 5 poses différentes en 10 secondes.",
+"Rire sans raison pendant 15 secondes.",
+"Faire une interview imaginaire avec toi-même.",
+"Imiter quelqu’un du groupe jusqu’à ce qu’il devine qui c’est.",
+"Faire une mini-scène dramatique avec un objet.",
+"Inventer une chanson sur quelqu’un du groupe.",
+"Faire un défilé de mode avec ce que tu portes.",
+"Dire une phrase très simple comme si c’était une tragédie.",
+"Faire deviner une émotion uniquement avec ton visage.",
+"Inventer une danse sur place.",
+"Faire semblant d’être un influenceur qui présente son goûter.",
+"Faire 3 accents différents en 30 secondes.",
+"Raconter une histoire en seulement 5 mots.",
+"Faire un compliment avec une voix de dessin animé.",
+"Imiter un personnage de dessin animé.",
+"Faire une scène de dispute avec un coussin.",
+"Inventer un slogan pour le groupe.",
+"Faire une pose de star à chaque fois que quelqu’un dit ton prénom pendant 2 minutes.",
+"Faire deviner ton film préféré sans parler.",
+"Chanter une chanson en remplaçant les paroles par « la la la ».",
+"Faire semblant de présenter une émission télé.",
+"Faire une imitation de quelqu’un qui est très surpris.",
+"Inventer une mini-histoire avec 3 mots imposés.",
+"Faire rire le groupe en moins de 30 secondes.",
+"Faire une photo de groupe avec une pose ridicule si tout le monde est d’accord.",
+"Laisser le groupe choisir ton prochain défi parmi 3 propositions raisonnables."
+];
+
+const verites = [
+"Quel est ton plus gros fou rire ?",
+"Quelle est ta plus grosse honte drôle ?",
+"Quel est ton talent le plus inutile ?",
+"Quelle est ta chanson préférée en ce moment ?",
+"Quel est ton film préféré ?",
+"Quel est ton pire défaut selon toi ?",
+"Quelle est ta meilleure qualité ?",
+"Quelle est la chose qui te fait instantanément rire ?",
+"Quel est ton surnom le plus bizarre ?",
+"Quelle est la dernière chose qui t’a fait rire ?",
+"Quel est ton emoji le plus utilisé ?",
+"Quelle est ta pire habitude ?",
+"Quelle est ta matière préférée ?",
+"Quelle matière tu aimes le moins ?",
+"Quelle est la chose la plus bizarre que tu fais quand tu es seul(e) ?",
+"Quel est ton plus gros rêve ?",
+"Quelle personne du groupe te fait le plus rire ?",
+"Quel est ton souvenir préféré avec tes amis ?",
+"Quelle est ta plus grande peur, si tu veux la partager ?",
+"Quelle est la chose que tu aimerais savoir faire ?",
+"Quel est ton plat préféré ?",
+"Quel est ton pire fashion faux pas ?",
+"Quel est ton mot ou expression préféré ?",
+"Quel film ou quelle série pourrais-tu revoir 100 fois ?",
+"Quel est ton plus gros fou rire en classe ?",
+"Quelle est la chose la plus spontanée que tu aies faite ?",
+"Quel est ton endroit préféré pour passer du temps avec tes amis ?",
+"Quelle est ta destination de rêve ?",
+"Quel est ton jeu préféré entre amis ?",
+"Quel est ton souvenir de vacances préféré ?",
+"Quelle est la chose qui t’énerve le plus chez les autres ?",
+"Quel est ton meilleur souvenir d’école ?",
+"Si tu pouvais avoir un talent instantanément, lequel ?",
+"Si tu pouvais rencontrer une célébrité, qui choisirais-tu ?",
+"Si tu pouvais vivre dans un film ou une série, lequel ?",
+"Quelle est la chose la plus drôle qui t’est arrivée récemment ?",
+"Quelle est ta chanson « honteuse » que tu aimes quand même ?",
+"Quelle est la chose que tes amis savent presque tous sur toi ?",
+"Quel est ton plus gros fou rire avec quelqu’un du groupe ?",
+"Quel est ton rêve pour cette année ?",
+"Quelle est ta journée parfaite ?",
+"Si tu pouvais changer de prénom pendant une journée, lequel choisirais-tu ?",
+"Quel métier voudrais-tu essayer juste pour une journée ?",
+"Quelle est la chose que tu aimerais améliorer dans ta personnalité ou tes habitudes ?",
+"Quelle est ta qualité préférée chez un ami ?",
+"Quel est le meilleur conseil qu’on t’ait donné ?",
+"Quelle est la chose qui te met facilement de bonne humeur ?",
+"Quelle est la meilleure blague qu’on t’ait faite ?",
+"Quel est ton souvenir le plus drôle avec ta classe ?",
+"Quelle question tu espérais ne surtout pas avoir dans ce jeu ?"
+];
+
+const result=document.getElementById("result");
+function show(type,list){
+ const item=list[Math.floor(Math.random()*list.length)];
+ result.innerHTML='<span><span class="type">'+type+'</span><br>'+item+'</span>';
+}
+document.getElementById("action").onclick=()=>show("🎭 ACTION",actions);
+document.getElementById("verite").onclick=()=>show("👀 VÉRITÉ",verites);
+document.getElementById("random").onclick=()=>{
+ Math.random()<.5?show("🎭 ACTION",actions):show("👀 VÉRITÉ",verites);
+};
+</script>
+</body>
+</html>
